@@ -1,5 +1,4 @@
-import React, {ChangeEvent} from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
 import {Guns} from "./emuns/Guns";
 import {SubmachineGuns} from './classes/SubmachineGuns';
@@ -9,12 +8,26 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
+import {FennecStrategy} from "./classes/SubmachineStrategies/FennecStrategy";
+import {UziStrategy} from "./classes/SubmachineStrategies/UziStrategy";
 
 function App() {
   const [selectedGun, setGun] = React.useState(Guns.BULLFROG);
+  console.log(selectedGun, Guns.BULLFROG);
   const context = new SubmachineGuns(new BullfrogStrategy());
   const handleChange = (event: SelectChangeEvent<unknown>) => {
     setGun(event.target?.value as Guns);
+    switch (selectedGun) {
+      case Guns.BULLFROG:
+        context.executeStrategy();
+        break;
+      case Guns.FENNEC:
+        context.setStrategy(new FennecStrategy());
+        break;
+      case Guns.UZI:
+        context.setStrategy(new UziStrategy())
+    }
+    const gunStatistics = context.executeStrategy();
   };
 
   return (
@@ -28,9 +41,9 @@ function App() {
               value={selectedGun}
               label="Submachine gun"
               onChange={handleChange}>
-            <MenuItem value={10}>{Guns.BULLFROG}</MenuItem>
-            <MenuItem value={20}>{Guns.FENNEC}</MenuItem>
-            <MenuItem value={30}>{Guns.UZI}</MenuItem>
+            <MenuItem value={Guns.BULLFROG}>{Guns.BULLFROG}</MenuItem>
+            <MenuItem value={Guns.FENNEC}>{Guns.FENNEC}</MenuItem>
+            <MenuItem value={Guns.UZI}>{Guns.UZI}</MenuItem>
           </Select>
         </FormControl>
       </Box>
