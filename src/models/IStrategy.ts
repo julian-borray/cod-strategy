@@ -1,4 +1,4 @@
-interface IWeaponData {
+export interface IWeaponData {
     precision:number;
     damage:number;
     range:number;
@@ -9,5 +9,9 @@ interface IWeaponData {
 }
 
 export interface IStrategy {
-    calculateStatistics: (name: string) => IWeaponData
+    calculateStatistics: () => IWeaponData;
+    calculatePrecision: () => number;
+    calculateDamage: () => number;
+    calculateRange: () => number;
+    calculateCadence: () => number;
 }

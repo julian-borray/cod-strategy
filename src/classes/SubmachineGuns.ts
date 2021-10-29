@@ -1,13 +1,17 @@
 import {IStrategy} from "../models/IStrategy";
 
 export class SubmachineGuns {
-    private strategy: string;
+    private strategy: IStrategy;
 
-    constructor(strategy: string) {
+    constructor(strategy: IStrategy) {
         this.strategy = strategy;
     }
 
-    setStrategy(){
+    setStrategy(strategy: IStrategy){
+        this.strategy = strategy;
+    }
 
+    executeStrategy(){
+        return this.strategy.calculateStatistics();
     }
 }
