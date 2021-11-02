@@ -1,38 +1,117 @@
 import React, {useState} from 'react';
 import './App.css';
 import {Guns} from "./emuns/Guns";
-import {SubmachineGuns} from './classes/SubmachineGuns';
-import {BullfrogStrategy} from "./classes/SubmachineStrategies/BullfrogStrategy";
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
-import {FennecStrategy} from "./classes/SubmachineStrategies/FennecStrategy";
-import {UziStrategy} from "./classes/SubmachineStrategies/UziStrategy";
 import LinearProgress from '@mui/material/LinearProgress';
 import {IWeaponData} from "./models/IStrategy";
 import Stack from '@mui/material/Stack';
 
 function App() {
-  const context = new SubmachineGuns(new BullfrogStrategy());
   const [selectedGun, setGun] = useState(Guns.BULLFROG);
-  const [gunStatistics, setGunStatistics] = useState<IWeaponData>(context.executeStrategy());
+  const gunStatistics = null;
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
     switch (event.target?.value) {
       case Guns.BULLFROG:
-        context.setStrategy(new BullfrogStrategy());
         break;
       case Guns.FENNEC:
-        context.setStrategy(new FennecStrategy());
         break;
       case Guns.UZI:
-        context.setStrategy(new UziStrategy())
     }
-    setGunStatistics(context.executeStrategy())
     setGun(event.target?.value as Guns);
   };
+  const putAccessories = (gun: string) =>{
+    switch (gun) {
+      case Guns.BULLFROG:
+        return {
+          muzzle: true,
+          barrel: true,
+          laser: true,
+          optic: true,
+          stock: true,
+          underBarrel: true,
+          ammunition: true,
+          rearGrip: true,
+          perk: true,
+        }
+      case Guns.FENNEC:
+        break;
+      case Guns.UZI:
+    }
+  }
+  const calculatePrecision = (gun: string): number =>{
+    let multiplier = 1;
+    const base = 3;
+    const accesories = putAccessories(gun);
+    if(this.optic){
+      multiplier = multiplier + 3;
+    }
+    if(this.underBarrel){
+      multiplier = multiplier + 4;
+    }
+    return base * multiplier;
+  }
+  const calculateDamage = (gun: string): number =>{
+    let multiplier = 1;
+    const base = 3;
+    if(this.barrel){
+      multiplier = multiplier + 4;
+    }
+    if(this.muzzle){
+      multiplier = multiplier + 2;
+    }
+    return base * multiplier;
+  }
+  const calculateRange = (gun: string): number =>{
+    let multiplier = 1;
+    const base = 4;
+    if(this.barrel){
+      multiplier = multiplier + 4;
+    }
+    if(this.muzzle){
+      multiplier = multiplier + 2;
+    }
+    return base * multiplier;    }
+  const calculateCadence = (gun: string): number =>{
+    let multiplier = 1;
+    const base = 3;
+    if(this.barrel){
+      multiplier = multiplier + 4;
+    }
+    if(this.ammunition){
+      multiplier = multiplier + 1;
+    }
+    if(this.muzzle){
+      multiplier = multiplier + 3;
+    }
+    return base * multiplier;
+  }
+  const calculateMobility = (gun: string): number =>{
+    let multiplier = 1;
+    const base = 3;
+    if(this.stock){
+      multiplier = multiplier + 7;
+    }
+    if(this.ammunition){
+      multiplier = multiplier + 3;
+    }
+    return base * multiplier;
+  }
+  const calculateControl = (gun: string): number =>{
+    let multiplier = 1;
+    const base = 3;
+    if(this.perk){
+      multiplier = multiplier + 8;
+    }
+    if(this.laser){
+      multiplier = multiplier + 4;
+    }
+    return base * multiplier;
+  }
   const renderStatistics = () => {
     const items: any = [];
     Object.keys(gunStatistics).forEach((data) => {
