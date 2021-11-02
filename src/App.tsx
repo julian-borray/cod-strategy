@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import {Guns} from "./emuns/Guns";
 import {SubmachineGuns} from './classes/SubmachineGuns';
@@ -10,16 +10,18 @@ import FormControl from '@mui/material/FormControl';
 import Select, {SelectChangeEvent} from '@mui/material/Select';
 import {FennecStrategy} from "./classes/SubmachineStrategies/FennecStrategy";
 import {UziStrategy} from "./classes/SubmachineStrategies/UziStrategy";
+import LinearProgress from '@mui/material/LinearProgress';
+import {IWeaponData} from "./models/IStrategy";
 
 function App() {
   const [selectedGun, setGun] = React.useState(Guns.BULLFROG);
-  console.log(selectedGun, Guns.BULLFROG);
   const context = new SubmachineGuns(new BullfrogStrategy());
+  let gunStatistics = context.executeStrategy();
+
   const handleChange = (event: SelectChangeEvent<unknown>) => {
-    setGun(event.target?.value as Guns);
     switch (selectedGun) {
       case Guns.BULLFROG:
-        context.executeStrategy();
+        context.setStrategy(new BullfrogStrategy());
         break;
       case Guns.FENNEC:
         context.setStrategy(new FennecStrategy());
@@ -27,9 +29,18 @@ function App() {
       case Guns.UZI:
         context.setStrategy(new UziStrategy())
     }
-    const gunStatistics = context.executeStrategy();
+    gunStatistics = context.executeStrategy();
+    setGun(event.target?.value as Guns);
+    console.log(selectedGun);
   };
-
+  const renderStatistics = (statistics?: IWeaponData) => {
+    const items: any = [];
+    let progressStatistics = statistics ? statistics : gunStatistics;
+    Object.keys(progressStatistics).forEach((data) => {
+      items.push(<p key={data}>{progressStatistics[data as keyof IWeaponData]}</p>)
+    });
+    return items;
+  }
   return (
     <div className="App">
       <Box sx={{ minWidth: 120 }}>
@@ -46,6 +57,7 @@ function App() {
             <MenuItem value={Guns.UZI}>{Guns.UZI}</MenuItem>
           </Select>
         </FormControl>
+        {renderStatistics(gunStatistics)}
       </Box>
     </div>
   );

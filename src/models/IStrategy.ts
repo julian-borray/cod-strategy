@@ -1,4 +1,4 @@
-export interface IWeaponData {
+export interface IWeaponData{
     precision:number;
     damage:number;
     range:number;

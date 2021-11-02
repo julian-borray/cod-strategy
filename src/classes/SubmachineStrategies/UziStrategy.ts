@@ -9,19 +9,19 @@ export class UziStrategy implements IStrategy{
             cadence:1,
             mobility:1,
             control: 1,
-            image: 'das',
+            image: 'uzi',
         }
     }
     calculatePrecision(): number{
-        return 1;
+        return 3;
     }
     calculateDamage(): number{
-        return 1;
+        return 3;
     }
     calculateRange(): number{
-        return 1;
+        return 3;
     }
     calculateCadence(): number{
-        return 1;
+        return 3;
     }
 }

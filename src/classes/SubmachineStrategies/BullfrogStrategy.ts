@@ -9,7 +9,7 @@ export class BullfrogStrategy implements IStrategy {
             cadence:1,
             mobility:1,
             control: 1,
-            image: 'das',
+            image: 'bullfrog',
         }
     }
     calculatePrecision(): number{

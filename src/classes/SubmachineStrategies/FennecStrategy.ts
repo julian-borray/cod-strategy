@@ -9,19 +9,19 @@ export class FennecStrategy implements IStrategy {
             cadence:1,
             mobility:1,
             control: 1,
-            image: 'das',
+            image: 'fennec',
         }
     }
     calculatePrecision(): number{
-        return 1;
+        return 2;
     }
     calculateDamage(): number{
-        return 1;
+        return 2;
     }
     calculateRange(): number{
-        return 1;
+        return 2;
     }
     calculateCadence(): number{
-        return 1;
+        return 2;
     }
 }
