@@ -3,13 +3,13 @@ import {IStrategy, IWeaponData} from "../../models/IStrategy";
 export class FennecStrategy implements IStrategy {
     calculateStatistics(): IWeaponData{
         return {
-            precision:1,
+            precision: this.calculatePrecision(),
             damage:1,
             range:1,
             cadence:1,
             mobility:1,
             control: 1,
-            image: 'fennec',
+            image: 'https://www.dexerto.es/wp-content/uploads/sites/3/2021/07/06/Fennec.jpg',
         }
     }
     calculatePrecision(): number{

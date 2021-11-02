@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {Guns} from "./emuns/Guns";
 import {SubmachineGuns} from './classes/SubmachineGuns';
@@ -12,14 +12,16 @@ import {FennecStrategy} from "./classes/SubmachineStrategies/FennecStrategy";
 import {UziStrategy} from "./classes/SubmachineStrategies/UziStrategy";
 import LinearProgress from '@mui/material/LinearProgress';
 import {IWeaponData} from "./models/IStrategy";
+import {type} from "os";
+import Stack from '@mui/material/Stack';
 
 function App() {
-  const [selectedGun, setGun] = React.useState(Guns.BULLFROG);
   const context = new SubmachineGuns(new BullfrogStrategy());
-  let gunStatistics = context.executeStrategy();
+  const [selectedGun, setGun] = useState(Guns.BULLFROG);
+  const [gunStatistics, setGunStatistics] = useState<IWeaponData>(context.executeStrategy());
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
-    switch (selectedGun) {
+    switch (event.target?.value) {
       case Guns.BULLFROG:
         context.setStrategy(new BullfrogStrategy());
         break;
@@ -29,20 +31,23 @@ function App() {
       case Guns.UZI:
         context.setStrategy(new UziStrategy())
     }
-    gunStatistics = context.executeStrategy();
+    setGunStatistics(context.executeStrategy())
     setGun(event.target?.value as Guns);
-    console.log(selectedGun);
   };
-  const renderStatistics = (statistics?: IWeaponData) => {
+  const renderStatistics = () => {
     const items: any = [];
-    let progressStatistics = statistics ? statistics : gunStatistics;
-    Object.keys(progressStatistics).forEach((data) => {
-      items.push(<p key={data}>{progressStatistics[data as keyof IWeaponData]}</p>)
+    Object.keys(gunStatistics).forEach((data) => {
+      if(typeof gunStatistics[data as keyof IWeaponData] === "number") {
+        items.push(<LinearProgress variant="buffer" value={gunStatistics[data as keyof IWeaponData] as number || undefined} valueBuffer={100} key={data}/>)
+      } else {
+        items.push(<img src={gunStatistics[data as keyof IWeaponData] as string} key={data} width={1000} alt={selectedGun}/>)
+      }
     });
     return items;
   }
   return (
     <div className="App">
+      {console.log("render")}
       <Box sx={{ minWidth: 120 }}>
         <FormControl >
           <InputLabel id="demo-simple-select-label">Gun</InputLabel>
@@ -57,7 +62,9 @@ function App() {
             <MenuItem value={Guns.UZI}>{Guns.UZI}</MenuItem>
           </Select>
         </FormControl>
-        {renderStatistics(gunStatistics)}
+        <Stack sx={{ width: '100%', color: 'grey.500' }} spacing={2}>
+          {renderStatistics()}
+        </Stack>
       </Box>
     </div>
   );
