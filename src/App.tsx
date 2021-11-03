@@ -50,7 +50,6 @@ function App() {
   }
   return (
     <div className="App">
-      {console.log("render")}
       <Box sx={{ minWidth: 120 }}>
         <FormControl >
           <InputLabel id="demo-simple-select-label">Gun</InputLabel>
