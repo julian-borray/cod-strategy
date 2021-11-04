@@ -25,7 +25,7 @@ export class FennecStrategy implements IStrategy {
         let multiplier = 2;
         const base = 4;
         if(this.optic){
-            multiplier = multiplier + 3;
+            multiplier = (multiplier*2) + 3;
         }
         if(this.underBarrel){
             multiplier = multiplier + 4;

@@ -12,105 +12,178 @@ import Stack from '@mui/material/Stack';
 
 function App() {
   const [selectedGun, setGun] = useState(Guns.BULLFROG);
-  const gunStatistics = null;
+  let gunStatistics: IWeaponData = {
+    precision:0,
+    damage:0,
+    range:0,
+    cadence:0,
+    mobility:0,
+    control: 0,
+    image:''
+  };
 
   const handleChange = (event: SelectChangeEvent<unknown>) => {
     switch (event.target?.value) {
       case Guns.BULLFROG:
+        gunStatistics = bullfrog(event.target?.value);
         break;
       case Guns.FENNEC:
+        gunStatistics = fennec(event.target?.value);
         break;
       case Guns.UZI:
+        gunStatistics = uzi(event.target?.value);
     }
     setGun(event.target?.value as Guns);
   };
+  const bullfrog = (gun: string)=> {
+    const values: IWeaponData = {
+      precision:0,
+      damage:0,
+      range:0,
+      cadence:0,
+      mobility:0,
+      control: 0,
+      image:''
+    }
+    values.precision = calculatePrecision(gun, 4,5);
+    values.damage = calculateDamage(gun, 4,5);
+    return values;
+  }
+  const fennec = (gun: string)=> {
+    const values: IWeaponData = {
+      precision:0,
+      damage:0,
+      range:0,
+      cadence:0,
+      mobility:0,
+      control: 0,
+      image:''
+    }
+    values.precision = calculatePrecision(gun, 4,5);
+    values.damage = calculateDamage(gun, 4,5);
+    return values;
+  }
+  const uzi = (gun: string)=> {
+    const values: IWeaponData = {
+      precision:0,
+      damage:0,
+      range:0,
+      cadence:0,
+      mobility:0,
+      control: 0,
+      image:''
+    }
+    values.precision = calculatePrecision(gun, 4,5);
+    values.damage = calculateDamage(gun, 4,5);
+    return values;
+  }
   const putAccessories = (gun: string) =>{
     switch (gun) {
       case Guns.BULLFROG:
         return {
           muzzle: true,
+          barrel: false,
+          laser: true,
+          optic: true,
+          stock: false,
+          underBarrel: true,
+          ammunition: true,
+          rearGrip: true,
+          perk: false,
+        }
+      case Guns.FENNEC:
+        return {
+          muzzle: false,
           barrel: true,
           laser: true,
+          optic: false,
+          stock: true,
+          underBarrel: true,
+          ammunition: true,
+          rearGrip: false,
+          perk: true,
+        }
+      case Guns.UZI:
+        return {
+          muzzle: true,
+          barrel: true,
+          laser: false,
           optic: true,
           stock: true,
           underBarrel: true,
           ammunition: true,
           rearGrip: true,
-          perk: true,
+          perk: false,
         }
-      case Guns.FENNEC:
-        break;
-      case Guns.UZI:
+      default:
+        return {
+          muzzle: false,
+          barrel: false,
+          laser: false,
+          optic: false,
+          stock: false,
+          underBarrel: false,
+          ammunition: false,
+          rearGrip: false,
+          perk: false,
+        }
     }
   }
-  const calculatePrecision = (gun: string): number =>{
-    let multiplier = 1;
-    const base = 3;
-    const accesories = putAccessories(gun);
-    if(this.optic){
-      multiplier = multiplier + 3;
+  const calculatePrecision = (gun: string, base: number, multiplier: number): number =>{
+    const accessories = putAccessories(gun);
+    if(gun === Guns.BULLFROG) {
+      if(accessories.optic){
+        multiplier = multiplier + 3;
+      }
+      if(accessories.underBarrel){
+        multiplier = multiplier + 4;
+      }
+      return base * multiplier;
+    } else if(gun === Guns.UZI) {
+      if(accessories.optic){
+        multiplier = multiplier + 3;
+      }
+      if(accessories.underBarrel){
+        multiplier = multiplier + 4;
+      }
+      return base * multiplier;
+    } else {
+      if(accessories.optic){
+        multiplier = (multiplier*2) + 3;
+      }
+      if(accessories.stock){
+        multiplier = multiplier + 4;
+      }
+      return base * multiplier;
     }
-    if(this.underBarrel){
-      multiplier = multiplier + 4;
-    }
-    return base * multiplier;
   }
-  const calculateDamage = (gun: string): number =>{
-    let multiplier = 1;
-    const base = 3;
-    if(this.barrel){
-      multiplier = multiplier + 4;
+  const calculateDamage = (gun: string, base: number, multiplier: number): number =>{
+    const accessories = putAccessories(gun);
+    if(gun === Guns.BULLFROG) {
+      if(accessories.optic){
+        multiplier = multiplier + 3;
+      }
+      if(accessories.underBarrel){
+        multiplier = multiplier + 4;
+      }
+      return base * multiplier;
+    } else if(gun === Guns.UZI) {
+      if(accessories.optic){
+        multiplier = multiplier + 3;
+      }
+      if(accessories.underBarrel){
+        multiplier = multiplier + 4;
+      }
+      return base * multiplier;
+    } else {
+      if(accessories.optic){
+        multiplier = (multiplier*2) + 3;
+      }
+      if(accessories.stock){
+        multiplier = multiplier + 4;
+      }
+      return base * multiplier;
     }
-    if(this.muzzle){
-      multiplier = multiplier + 2;
-    }
-    return base * multiplier;
-  }
-  const calculateRange = (gun: string): number =>{
-    let multiplier = 1;
-    const base = 4;
-    if(this.barrel){
-      multiplier = multiplier + 4;
-    }
-    if(this.muzzle){
-      multiplier = multiplier + 2;
-    }
-    return base * multiplier;    }
-  const calculateCadence = (gun: string): number =>{
-    let multiplier = 1;
-    const base = 3;
-    if(this.barrel){
-      multiplier = multiplier + 4;
-    }
-    if(this.ammunition){
-      multiplier = multiplier + 1;
-    }
-    if(this.muzzle){
-      multiplier = multiplier + 3;
-    }
-    return base * multiplier;
-  }
-  const calculateMobility = (gun: string): number =>{
-    let multiplier = 1;
-    const base = 3;
-    if(this.stock){
-      multiplier = multiplier + 7;
-    }
-    if(this.ammunition){
-      multiplier = multiplier + 3;
-    }
-    return base * multiplier;
-  }
-  const calculateControl = (gun: string): number =>{
-    let multiplier = 1;
-    const base = 3;
-    if(this.perk){
-      multiplier = multiplier + 8;
-    }
-    if(this.laser){
-      multiplier = multiplier + 4;
-    }
-    return base * multiplier;
   }
   const renderStatistics = () => {
     const items: any = [];
@@ -129,7 +202,6 @@ function App() {
   }
   return (
     <div className="App">
-      {console.log("render")}
       <Box sx={{ minWidth: 120 }}>
         <FormControl >
           <InputLabel id="demo-simple-select-label">Gun</InputLabel>
